@@ -4,8 +4,8 @@ FSJS project 2 - List Filter and Pagination
 ******************************************/
 
 // Create and append a search bar and a search button.
-// Create a new student list variable based on the search matches and the Html.  
-// Use it as an argument when calling the existing functions
+// Create a new student list variable based on the search matches and the HTML.  
+// Use it as an argument when calling the existing functions.
 // Paginate the search results and add 'No match' message. 
 
 const search = document.createElement("div");
@@ -17,36 +17,26 @@ input.setAttribute("placeholder","search for student...");
 const button = document.createElement("button");
 button.textContent = "search";
 
-// Append the search bar and button to the header of the page.
+// Append the search bar, button and input to the header of the page.
 const pageHeader = document.getElementsByClassName("page-header");
 pageHeader[0].appendChild(search).appendChild(input);
    search.appendChild(button);
-
-// Add keyup event listener to improve user experience.
-input.addEventListener('keyup',() =>{
-   searchForStudents(); 
-});
-
-button.addEventListener('click', (event) => {
-   event.preventDefault();
-   searchForStudents();
-}); 
 
 // Create search function and store the results in an array as a new list.
 const searchForStudents = ()=> {
    const newList = [];
 
-// Remove no results message if it already exists 
-   let noResults = document.getElementsByClassName("no-results")
+// Remove no results message if it already exists. 
+   const noResults = document.getElementsByClassName("no-results")
    if(noResults.length > 0) {
       noResults[0].remove();
    }
-// if there's no search input, show all students first page.
+// Show all students first page if there's no search input.
    if(input.value === "") {
       showPage(studentList, 1);
       appendPageLinks(studentList); 
    } else{
-// loop through all students to find matches 
+// Loop through all students to find matches 
       for (let i=0; i<studentList.length; i+=1){
          const studentName = studentList[i].getElementsByTagName("h3");
             studentList[i].style.display= "none";
@@ -55,10 +45,9 @@ const searchForStudents = ()=> {
             newList.push(studentList[i]);
          }
       }
-      
 // Add 'No result' message if no search matches were found.
       if(newList.length == 0) {
-         let noMatches = document.createElement("h2");
+         const noMatches = document.createElement("h2");
          noMatches.textContent = "No results, please try again";
          noMatches.classList.add("no-results");
          document.getElementsByClassName("page")[0].appendChild(noMatches);
@@ -68,19 +57,29 @@ const searchForStudents = ()=> {
       appendPageLinks(newList); 
    }
 }
+// Add keyup event listener to improve user experience.
+input.addEventListener('keyup',() =>{
+   searchForStudents(); 
+});
+button.addEventListener('click', (event) => {
+   event.preventDefault();
+   searchForStudents();
+}); 
+
+
 // Add global variable to store the DOM elements to reference and manipulate.
 const studentList = document.getElementsByClassName("student-item");
 const pageItems = 10;
 
 // Create the showPage function with two parameter to hide all of 
-// the items in the student list except for first ten.
+// the items in the student list except for the first ten.
 
 const showPage = (students,page)=> {
        
 // Create two variables to store the start and end index of each page.  
 // Make this function dynamic and work with a list of any length. 
-   let startIndex = (page * pageItems)-pageItems;
-   let endIndex = page * pageItems;
+   const startIndex = (page * pageItems)-pageItems;
+   const endIndex = page * pageItems;
 
 // Loop over the list parameter.
 // Hide students list and show the first page only when user load it.
@@ -114,8 +113,8 @@ const appendPageLinks = (studentList) => {
    
 // Add 'li' and 'a' to every page with the page number text.
    for (let i=0; i<numOfPages; i+=1){
-      let li = document.createElement("li");
-      let a = document.createElement ("a");
+      const li = document.createElement("li");
+      const a = document.createElement ("a");
          a.setAttribute("href","#")
          ul.appendChild(li).appendChild(a);
 
@@ -125,25 +124,25 @@ const appendPageLinks = (studentList) => {
          a.classList.add("active");
       }
    }  
-// get all the a links 
+// Select all the alinks. 
    const aLinks = ul.querySelectorAll('a');
 
-// Add event listener to each 'a' link
+// Add event listener to each 'a' link.
    for(let i=0; i<aLinks.length; i+=1) {
       aLinks[i].addEventListener('click', (e) => {
 
-// remove active from all links
+// Remove active from all links.
       for (let j=0; j<aLinks.length; j+=1) {
          aLinks[j].classList.remove("active");
       } 
-// add back "active" to clicked link
+// Add back "active" to clicked link.
       e.target.classList.add("active");
 
-// call the showPage function.
+// Call the showPage function.
          showPage(studentList,i+1);
       });
    }
-// add the ul to the div and the div to the page.
+// Add the ul to the div and the div to the page.
    page[0].appendChild(div).appendChild(ul);
 };
 // Call showPage and appendPageLinks functions with initial list of students.
